@@ -111,13 +111,16 @@ def train(model, data, args):
             yield ([x_batch, y_batch], [y_batch, x_batch])
 
     # Training with data augmentation. If shift_fraction=0., also no augmentation.
-    model.fit_generator(generator=train_generator(x_train, y_train, args.batch_size, args.shift_fraction),
+    '''model.fit_generator(generator=train_generator(x_train, y_train, args.batch_size, args.shift_fraction),
                         steps_per_epoch=int(y_train.shape[0] / args.batch_size),
                         epochs=args.epochs,
                         validation_data=[[x_test, y_test], [y_test, x_test]],
                         callbacks=[log, tb, checkpoint, lr_decay])
     # End: Training with data augmentation -----------------------------------------------------------------------#
-
+'''
+    model.fit([x_train,y_train], [y_train,x_train], batch_size=100,
+              epochs=20,
+              validation=[[x_test,y_test],[y_test,x_test]])
     model.save_weights(args.save_dir + '/trained_model.h5')
     print('Trained model saved to \'%s/trained_model.h5\'' % args.save_dir)
 
